@@ -1,0 +1,7 @@
+idix_crop.test_resize:
+  path: 'admin/idix_crop/test/{media}'
+  defaults:
+    _controller: \Drupal\idix_crop\Controller\AdminController::testResize
+    _title: 'IDIX Crop : Test Resize'
+  requirements:
+    _permission: 'administer crop'

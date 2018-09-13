@@ -1,0 +1,22 @@
+{
+  "name": "idix/idix_crop",
+  "type": "drupal-custom-module",
+  "description": "Module de gestion des crops automatique",
+  "keywords": ["Drupal", "crop", "image"],
+  "authors": [
+    {
+      "name": "Sylvain Tixier",
+      "email": "sylvain.tixier@idix.fr",
+      "role": "Maintainer"
+    },
+    {
+      "name": "Nicolas Bugeja",
+      "email": "nicolas.bugeja@idix.fr",
+      "role": "Maintainer"
+    }
+  ],
+  "require": {
+    "drupal/core": "8.*",
+    "drupal/crop": "1.*"
+  }
+}

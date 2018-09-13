@@ -1,0 +1,8 @@
+name: IDIX Crop
+description: 'Système de crop par défaut IDIX.'
+version: '8.x-1.0'
+core: 8.x
+package: IDIX
+type: module
+dependencies:
+  - crop
