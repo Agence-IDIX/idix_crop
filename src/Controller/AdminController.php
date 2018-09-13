@@ -4,7 +4,7 @@ namespace Drupal\idix_crop\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\image\Entity\ImageStyle;
-use Drupal\media_entity\Entity\Media;
+use Drupal\media\Entity\Media;
 
 //use Drupal\media\Entity\Media;
 
