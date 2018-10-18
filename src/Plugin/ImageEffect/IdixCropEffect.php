@@ -3,8 +3,10 @@
 namespace Drupal\idix_crop\Plugin\ImageEffect;
 
 use Drupal\Core\Image\ImageInterface;
+use Drupal\crop\CropInterface;
 use Drupal\crop\Entity\CropType;
 use Drupal\crop\Plugin\ImageEffect\CropEffect;
+use Drupal\crop\Entity\Crop;
 
 /**
  * Crops an image resource.
@@ -107,6 +109,28 @@ class IdixCropEffect extends CropEffect {
       return $num1 / $num2;
     }
     return floatval($aspect_ratio);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function transformDimensions(array &$dimensions, $uri) {
+    $crop = Crop::findCrop($uri, $this->configuration['crop_type']);
+    if (!$crop instanceof CropInterface) {
+      $image = $this->imageFactory->get($uri);
+      /** @var CropType $cropConf */
+      $cropConf = $this->typeStorage->load($this->configuration['crop_type']);
+      $size = $this->_getDefaultSize($image, $cropConf);
+
+      $dimensions['width'] = $size['width'];
+      $dimensions['height'] = $size['height'];
+      return;
+    }
+    $size = $crop->size();
+
+    // The new image will have the exact dimensions defined for the crop effect.
+    $dimensions['width'] = $size['width'];
+    $dimensions['height'] = $size['height'];
   }
 
 }
