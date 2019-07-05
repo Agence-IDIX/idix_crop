@@ -102,7 +102,7 @@ class IdixCropEffect extends CropEffect {
     return $size;
   }
 
-  protected function _parseRatio($aspect_ratio, &$ratio_data){
+  protected function _parseRatio($aspect_ratio, &$ratio_data = []){
     if(strpos($aspect_ratio, ':') !== false){
       $parts = explode(':', $aspect_ratio);
       $num1 = intval($parts[0], 10);
