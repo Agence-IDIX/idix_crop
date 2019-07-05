@@ -77,12 +77,11 @@ class IdixCropEffect extends CropEffect {
     ];
 
     $aspect_ratio = $cropConf->getAspectRatio();
-    $ratio = $this->_parseRatio($aspect_ratio);
+    $ratio_data = [];
+    $ratio = $this->_parseRatio($aspect_ratio, $ratio_data);
 
-    $aRatio = explode(':', $aspect_ratio);
-
-    $originalWidth = $image->getWidth() != null ? $image->getWidth() : $ratio[0];
-    $originalHeight = $image->getHeight() != null ? $image->getHeight() : $aRatio[1];
+    $originalWidth = $image->getWidth() != null ? $image->getWidth() : $ratio_data['width'];
+    $originalHeight = $image->getHeight() != null ? $image->getHeight() : $ratio_data['height'];
     $originalRatio = $this->_parseRatio($originalWidth . ':' . $originalHeight);
 
 
@@ -103,14 +102,21 @@ class IdixCropEffect extends CropEffect {
     return $size;
   }
 
-  protected function _parseRatio($aspect_ratio){
+  protected function _parseRatio($aspect_ratio, &$ratio_data){
     if(strpos($aspect_ratio, ':') !== false){
       $parts = explode(':', $aspect_ratio);
       $num1 = intval($parts[0], 10);
       $num2 = intval($parts[1], 10);
+      $ratio_data['width'] = $num1;
+      $ratio_data['height'] = $num2;
       return $num1 / $num2;
     }
-    return floatval($aspect_ratio);
+
+    $value = floatval($aspect_ratio);
+    $ratio_data['width'] = $value;
+    $ratio_data['height'] = $value;
+
+    return $value;
   }
 
   /**
