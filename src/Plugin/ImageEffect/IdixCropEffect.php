@@ -79,8 +79,10 @@ class IdixCropEffect extends CropEffect {
     $aspect_ratio = $cropConf->getAspectRatio();
     $ratio = $this->_parseRatio($aspect_ratio);
 
-    $originalWidth = $image->getWidth();
-    $originalHeight = $image->getHeight();
+    $aRatio = explode(':', $aspect_ratio);
+
+    $originalWidth = $image->getWidth() != null ? $image->getWidth() : $ratio[0];
+    $originalHeight = $image->getHeight() != null ? $image->getHeight() : $aRatio[1];
     $originalRatio = $this->_parseRatio($originalWidth . ':' . $originalHeight);
 
 
