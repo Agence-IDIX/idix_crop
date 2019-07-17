@@ -2,10 +2,12 @@
 
 namespace Drupal\idix_crop\Entity;
 
+use Drupal\crop\Entity\Crop;
 use Drupal\image\Entity\ImageStyle as ImageStyleBase;
 use Drupal\Core\Routing\RequestHelper;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Drupal\Component\Utility\UrlHelper;
+use Drupal\Core\Url;
 
 class ImageStyle extends ImageStyleBase {
 
@@ -29,7 +31,7 @@ class ImageStyle extends ImageStyleBase {
       $original_uri = file_uri_scheme($path) ? file_stream_wrapper_uri_normalize($path) : file_build_uri($path);
       $token_query = [IMAGE_DERIVATIVE_TOKEN => $this->getPathToken($original_uri)];
 
-      $effects_token = $this->getEffectsToken();
+      $effects_token = $this->getEffectsToken($original_uri);
       if(!empty($effects_token)){
         $token_query['etok'] = $effects_token;
       }
@@ -65,8 +67,29 @@ class ImageStyle extends ImageStyleBase {
     return $file_url;
   }
 
-  protected function getEffectsToken(){
-    
+  protected function getEffectsToken($original_uri){
+    $token = '';
+    foreach ($this->getEffects() as $effect) {
+      if(in_array($effect->getPluginId(), ['idix_crop_crop', 'crop_crop'])){
+        $image = $this->getImageFactory()->get($original_uri);
+        if (!$image->isValid()) {
+          break;
+        }
+        $effect_config = $effect->getConfiguration();
+        if(empty($effect_config['data']['crop_type']) || !\Drupal::entityTypeManager()->getStorage('crop_type')->load($effect_config['data']['crop_type'])) {
+          continue;
+        }
+
+        if($crop = Crop::findCrop($image->getSource(), $effect_config['data']['crop_type'])){
+          $anchor = $crop->anchor();
+          $size = $crop->size();
+          $token .= $anchor['x'] . $anchor['y'] . $size['width'] . $size['height'];
+        }
+      }
+    }
+    if(!empty($token)){
+      return md5($token);
+    }
     return '';
   }
 
