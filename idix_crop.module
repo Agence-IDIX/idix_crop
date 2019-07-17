@@ -1,0 +1,10 @@
+<?php
+
+/**
+ * @param EntityTypeInterface[] $entity_types
+ */
+function idix_crop_entity_type_build(&$entity_types) {
+  if (isset($entity_types['image_style'])) {
+    $entity_types['image_style']->setClass('Drupal\idix_crop\Entity\ImageStyle');
+  }
+}
